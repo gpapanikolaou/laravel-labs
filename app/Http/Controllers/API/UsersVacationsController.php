@@ -3,33 +3,45 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\VacationResource;
 use Illuminate\Http\Request;
 use App\Http\Requests\UsersVacations\StoreRequest;
+use App\Http\Requests\UsersVacations\UpdateRequest;
 use App\Models\User;
 use App\Models\Vacation;
 
 class UsersVacationsController extends Controller
 {
     
-    public function index(){
-        $skills = Vacation::all();
-        return $skills;
-    }
+    public function index(User $user){
+        $vacations=$user->vacations;
+     
+        return response()->json(compact('vacations'), 201);
+    }   
 
-    public function show(Request $request){
-       
-    }
-
-    public function store(StoreRequest $request,$id){
+    public function show(User $user,Vacation $vacation){
         
-        $vacation = Vacation::create(['from' => $request->from,'to'=>$request->to,'user_id'=>$id]);
-        return response()->json(compact('vacation'), 201); 
+        $vacations = Vacation::where('user_id', $user->id)->get();
+        $vacation = new VacationResource($vacation);
+
+        return response()->json(['vacation' => new VacationResource($vacation)], 200);
     }
 
-    public function update(Request $request){
-        dd('update');
+    public function store(StoreRequest $request,User $user){
+        
+        $user->vacations()->create($request->only('from', 'to'));
+
+        return response()->json(null, 201);
     }
-    public function destroy(Request $request){
-        dd('destroy');
+
+    public function update(User $user, Vacation $vacation, UpdateRequest $request) {
+        $vacation->update($request->only('from', 'to'));
+
+        return response()->json(null, 204);
+    }
+    public function destroy(User $user, Vacation $vacation) {
+        $vacation->delete();
+
+        return response()->json(null, 204);
     }
 }

@@ -10,12 +10,19 @@ use App\Models\Department;
 
 class DepartmentsUsersController extends Controller
 {
-    public function store(StoreRequest $request,$id){
-        $user = User::find($id);
-        $user->departments()->attach($request->only('dpt_id'));
+
+
+    public function update(Department $department, User $user) {
+        $user->department()->associate($department);
+        $user->save();
+
+        return response()->json(null, 204);
     }
 
-    public function destroy($id){
-        dd('destroy');
+    public function destroy(Department $department, User $user){
+        $user->department()->disassociate();
+        $user->save();
+
+        return response()->json(null, 204);
     }
 }

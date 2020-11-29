@@ -15,16 +15,13 @@ class UsersController extends Controller
     public function index(){
         
         $users = UserResource::collection(User::all());
-        
         $count = count($users);
-        
-
         return response()->json(compact('users', 'count'));
     }
 
-    public function show($id){
-        $user = User::findOrFail($id);
-        return compact('user');
+    public function show(User $user){
+        $user = new UserResource($user);
+        return response()->json(compact('user'));
         
     }
     public function store(StoreRequest $request){
@@ -43,6 +40,7 @@ class UsersController extends Controller
 
     public function destroy($id){
         User::find($id)->delete();
+        return response()->json(null, 204);
     }
 
 

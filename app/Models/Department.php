@@ -9,10 +9,13 @@ class Department extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'manager'
-    ];
+    protected $guarded = ['id'];
 
+    public function users() {
+        return $this->hasMany(User::class);
+    }
 
+    public function manager() {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
 }

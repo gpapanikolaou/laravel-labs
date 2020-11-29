@@ -42,20 +42,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['fullName'];
+
     public function getFullNameAttribute() {
         return "{$this->attributes['firstName']} {$this->attributes['lastName']}";
     }
 
-    public function getIdAttribute(){
-        return $this->attributes['id'];
-    }
 
     public function skills()
     {
         return $this->belongsToMany('App\Models\Skill', 'users_skills');
     }
-    public function departments()
+    public function department()
     {
-        return $this->belongsToMany('App\Models\Department', 'users_departments');
+        return $this->belongsTo(Department::class);
+    }
+
+    public function vacations(){
+        
+        return $this->hasMany(Vacation::class, 'user_id');
     }
 }

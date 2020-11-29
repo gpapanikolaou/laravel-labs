@@ -9,14 +9,10 @@ class Skill extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-    ];
+    protected $guarded = ['id'];
 
-    public function users()
-    {
-        return $this->belongsToMany('App\Models\User', 'users_skills');
-
+    public function users() {
+        return $this->belongsToMany(User::class, 'users_skills');
     }
 
 

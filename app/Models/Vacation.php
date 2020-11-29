@@ -9,15 +9,9 @@ class Vacation extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'from',
-        'to',
-        'user_id',
-    ];
+    protected $guarded = ['id'];
 
-    public function users()
-    {
-        return $this->hasMany('App\Models\User');
-
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }
