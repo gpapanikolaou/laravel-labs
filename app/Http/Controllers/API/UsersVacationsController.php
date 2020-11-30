@@ -16,15 +16,14 @@ class UsersVacationsController extends Controller
     public function index(User $user){
         $vacations=$user->vacations;
      
-        return response()->json(compact('vacations'), 201);
+        return response()->json(compact('vacations'));
     }   
 
     public function show(User $user,Vacation $vacation){
         
-        $vacations = Vacation::where('user_id', $user->id)->get();
         $vacation = new VacationResource($vacation);
 
-        return response()->json(['vacation' => new VacationResource($vacation)], 200);
+        return response()->json(compact('vacation'));
     }
 
     public function store(StoreRequest $request,User $user){
